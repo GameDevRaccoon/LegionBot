@@ -11,8 +11,17 @@ COPY . .
 WORKDIR "/src/."
 RUN dotnet build "LegionBot.csproj" -c Release -o /app/build
 
+WORKDIR /testModulesrc
+COPY ["TestModule.csproj", ""]
+RUN donet restore
+COPY . .
+WORKDIR "/testModulesrc/."
+RUN dotnet build "TestModule.csproj" -c Release -o /app/build
+
 FROM build AS publish
 RUN dotnet publish "LegionBot.csproj" -c Release -o /app/publish
+
+RUN dotnet publish "TestModule.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app

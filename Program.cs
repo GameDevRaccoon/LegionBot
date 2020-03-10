@@ -51,8 +51,11 @@ namespace LegionBot
         }
 
         private async Task RegisterCommandsAsync()
-        { 
+        {
+            Assembly assembly = Assembly.LoadFrom(ConfigurationManager.AppSettings["TestModule"]);
+            await _commands.AddModulesAsync(assembly, _services);
             await _commands.AddModulesAsync(Assembly.GetEntryAssembly(), _services);
+
         }
 
         private async Task HandleCommandAsync(SocketMessage arg)
