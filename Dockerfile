@@ -5,23 +5,20 @@ WORKDIR /app
 
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster-arm32v7 AS build
 WORKDIR /src
+COPY ["LegionBot.sln", ""]
+COPY ["./TestModule/TestModule.csproj", "./TestModule/"]
 COPY ["LegionBot.csproj", ""]
+
 RUN dotnet restore
 COPY . .
-WORKDIR "/src/."
-RUN dotnet build "LegionBot.csproj" -c Release -o /app/build
-
-WORKDIR /testModulesrc
-COPY ["TestModule.csproj", ""]
-RUN donet restore
-COPY . .
-WORKDIR "/testModulesrc/."
+WORKDIR ./TestModule/
 RUN dotnet build "TestModule.csproj" -c Release -o /app/build
 
-FROM build AS publish
-RUN dotnet publish "LegionBot.csproj" -c Release -o /app/publish
+WORKDIR /src/
+RUN dotnet build "LegionBot.csproj" -c Release -o /app/build
 
-RUN dotnet publish "TestModule.csproj" -c Release -o /app/publish
+FROM build AS publish
+RUN dotnet publish -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
