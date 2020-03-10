@@ -6,7 +6,7 @@ WORKDIR /app
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
 WORKDIR /src
 COPY ["LegionBot.csproj", ""]
-RUN dotnet restore "./LegionBot.csproj"
+RUN dotnet restore
 COPY . .
 WORKDIR "/src/."
 RUN dotnet build "LegionBot.csproj" -c Release -o /app/build
