@@ -3,3 +3,4 @@
 .vs/
 app.config
 config.json
+*.csproj.user
